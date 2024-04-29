@@ -13,15 +13,20 @@ os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 
 
 st.title("Langchain Demo Chatbot")
-input_text = st.text_input("Search the topic u want")
+input_text = st.text_input("Search the topic you want")
 
 
 prompt = ChatPromptTemplate.from_messages([
     ("system", "You are a helpful assistant. Please response to the user queries."),
-    ("user", "Question: {input}")
+    ("user", "Question: {question}")
 ])
 
 llm = ChatOpenAI(model= "gpt-3.5-turbo")
 
 output_parser = StrOutputParser()
+
+chain = prompt | llm | output_parser
+
+if input_text:
+    st.write(chain.invoke({'question' : input_text}))
 
